@@ -34,7 +34,7 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="bg-zinc-900 py-4 px-8 text-center text-sm text-white flex-wrap mt-auto">
+    <footer className="bg-zinc-900 py-2 px-8 text-center text-sm text-white flex-wrap mt-auto">
       <div className="mt-4 flex flex-wrap justify-around gap-16 max-w-fit items-stretch mx-auto">
         <div className="flex flex-col items-start justify-start h-full mr-15">
           <Logo />
@@ -55,7 +55,7 @@ export default function Footer() {
           </div>
         ))}
       </div>
-      <p className="text-muted-foreground mt-2">&copy; 2026 Sebastian Drabik. All rights reserved.</p>
+      <p className="text-muted-foreground mt-8">&copy; 2026 Sebastian Drabik. All rights reserved.</p>
     </footer>
   )
 }

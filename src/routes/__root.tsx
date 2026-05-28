@@ -1,14 +1,35 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
+import { HeadContent, Outlet, Scripts, createRootRoute, createRootRouteWithContext, redirect } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
+import { getRequest } from '@tanstack/react-start/server'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 
 import appCss from '../styles.css?url'
+import { authClient } from '#/lib/auth-client'
 
 const THEME_INIT_SCRIPT = `(function(){try{var stored=window.localStorage.getItem('theme');var mode=(stored==='light'||stored==='dark'||stored==='auto')?stored:'auto';var prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;var resolved=mode==='auto'?(prefersDark?'dark':'light'):mode;var root=document.documentElement;root.classList.remove('light','dark');root.classList.add(resolved);if(mode==='auto'){root.removeAttribute('data-theme')}else{root.setAttribute('data-theme',mode)}root.style.colorScheme=resolved;}catch(e){}})();`
 
-export const Route = createRootRoute({
+type Session = typeof authClient.$Infer.Session
+
+type RouterContext = {
+  session: Session | null
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
+  beforeLoad: async ({ matches }) => {
+    const request = getRequest()
+
+    const { data } = await authClient.getSession({ fetchOptions: { cache: 'no-store', headers: request?.headers } })
+
+    const isAuthenticated = !!data?.user
+    const requiresAuth = matches.some(m => m.staticData?.requireAuth)
+
+    if (requiresAuth && !isAuthenticated) throw redirect({ to: '/user/login' })
+    else if (requiresAuth === false && isAuthenticated) throw redirect({ to: '/user/dashboard' })
+
+    return { session: data }
+  },
   head: () => ({
     meta: [
       {
@@ -30,6 +51,7 @@ export const Route = createRootRoute({
     ],
   }),
   shellComponent: RootDocument,
+  component: () => <Outlet />,
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
@@ -59,3 +81,5 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     </html>
   )
 }
+
+export type { RouterContext }

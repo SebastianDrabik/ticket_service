@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UserRegisterRouteImport } from './routes/user/register'
 import { Route as UserLoginRouteImport } from './routes/user/login'
+import { Route as UserDashboardRouteImport } from './routes/user/dashboard'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const AboutRoute = AboutRouteImport.update({
@@ -24,9 +26,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UserRegisterRoute = UserRegisterRouteImport.update({
+  id: '/user/register',
+  path: '/user/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UserLoginRoute = UserLoginRouteImport.update({
   id: '/user/login',
   path: '/user/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UserDashboardRoute = UserDashboardRouteImport.update({
+  id: '/user/dashboard',
+  path: '/user/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
@@ -38,34 +50,61 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/user/dashboard': typeof UserDashboardRoute
   '/user/login': typeof UserLoginRoute
+  '/user/register': typeof UserRegisterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/user/dashboard': typeof UserDashboardRoute
   '/user/login': typeof UserLoginRoute
+  '/user/register': typeof UserRegisterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/user/dashboard': typeof UserDashboardRoute
   '/user/login': typeof UserLoginRoute
+  '/user/register': typeof UserRegisterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/user/login' | '/api/auth/$'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/user/dashboard'
+    | '/user/login'
+    | '/user/register'
+    | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/user/login' | '/api/auth/$'
-  id: '__root__' | '/' | '/about' | '/user/login' | '/api/auth/$'
+  to:
+    | '/'
+    | '/about'
+    | '/user/dashboard'
+    | '/user/login'
+    | '/user/register'
+    | '/api/auth/$'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/user/dashboard'
+    | '/user/login'
+    | '/user/register'
+    | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  UserDashboardRoute: typeof UserDashboardRoute
   UserLoginRoute: typeof UserLoginRoute
+  UserRegisterRoute: typeof UserRegisterRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -85,11 +124,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/user/register': {
+      id: '/user/register'
+      path: '/user/register'
+      fullPath: '/user/register'
+      preLoaderRoute: typeof UserRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/user/login': {
       id: '/user/login'
       path: '/user/login'
       fullPath: '/user/login'
       preLoaderRoute: typeof UserLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/user/dashboard': {
+      id: '/user/dashboard'
+      path: '/user/dashboard'
+      fullPath: '/user/dashboard'
+      preLoaderRoute: typeof UserDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
@@ -105,7 +158,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  UserDashboardRoute: UserDashboardRoute,
   UserLoginRoute: UserLoginRoute,
+  UserRegisterRoute: UserRegisterRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
