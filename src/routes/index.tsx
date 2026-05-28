@@ -4,7 +4,7 @@ export const Route = createFileRoute('/')({ component: App })
 
 function App() {
   return (
-    <main>
+    <main className="min-h-screen bg-zinc-100">
     </main>
   )
 }

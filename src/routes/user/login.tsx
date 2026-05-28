@@ -16,7 +16,7 @@ function RouteComponent() {
   return <div className='flex items-center justify-center my-20'>
     <Card className='w-full max-w-md'>
       <CardHeader>
-        <CardTitle>Login to your account</CardTitle>
+        <CardTitle className='text-2xl'>Login to your account</CardTitle>
         <CardDescription>
           Enter your email and password to access your account.
         </CardDescription>
