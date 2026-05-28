@@ -14,6 +14,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as UserRegisterRouteImport } from './routes/user/register'
 import { Route as UserLoginRouteImport } from './routes/user/login'
 import { Route as UserDashboardRouteImport } from './routes/user/dashboard'
+import { Route as EventsBrowseRouteImport } from './routes/events/browse'
+import { Route as BusinessCreateRouteImport } from './routes/business/create'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const AboutRoute = AboutRouteImport.update({
@@ -41,6 +43,16 @@ const UserDashboardRoute = UserDashboardRouteImport.update({
   path: '/user/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EventsBrowseRoute = EventsBrowseRouteImport.update({
+  id: '/events/browse',
+  path: '/events/browse',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BusinessCreateRoute = BusinessCreateRouteImport.update({
+  id: '/business/create',
+  path: '/business/create',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -50,6 +62,8 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/business/create': typeof BusinessCreateRoute
+  '/events/browse': typeof EventsBrowseRoute
   '/user/dashboard': typeof UserDashboardRoute
   '/user/login': typeof UserLoginRoute
   '/user/register': typeof UserRegisterRoute
@@ -58,6 +72,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/business/create': typeof BusinessCreateRoute
+  '/events/browse': typeof EventsBrowseRoute
   '/user/dashboard': typeof UserDashboardRoute
   '/user/login': typeof UserLoginRoute
   '/user/register': typeof UserRegisterRoute
@@ -67,6 +83,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/business/create': typeof BusinessCreateRoute
+  '/events/browse': typeof EventsBrowseRoute
   '/user/dashboard': typeof UserDashboardRoute
   '/user/login': typeof UserLoginRoute
   '/user/register': typeof UserRegisterRoute
@@ -77,6 +95,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/business/create'
+    | '/events/browse'
     | '/user/dashboard'
     | '/user/login'
     | '/user/register'
@@ -85,6 +105,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/business/create'
+    | '/events/browse'
     | '/user/dashboard'
     | '/user/login'
     | '/user/register'
@@ -93,6 +115,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/business/create'
+    | '/events/browse'
     | '/user/dashboard'
     | '/user/login'
     | '/user/register'
@@ -102,6 +126,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  BusinessCreateRoute: typeof BusinessCreateRoute
+  EventsBrowseRoute: typeof EventsBrowseRoute
   UserDashboardRoute: typeof UserDashboardRoute
   UserLoginRoute: typeof UserLoginRoute
   UserRegisterRoute: typeof UserRegisterRoute
@@ -145,6 +171,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/events/browse': {
+      id: '/events/browse'
+      path: '/events/browse'
+      fullPath: '/events/browse'
+      preLoaderRoute: typeof EventsBrowseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/business/create': {
+      id: '/business/create'
+      path: '/business/create'
+      fullPath: '/business/create'
+      preLoaderRoute: typeof BusinessCreateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -158,6 +198,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  BusinessCreateRoute: BusinessCreateRoute,
+  EventsBrowseRoute: EventsBrowseRoute,
   UserDashboardRoute: UserDashboardRoute,
   UserLoginRoute: UserLoginRoute,
   UserRegisterRoute: UserRegisterRoute,

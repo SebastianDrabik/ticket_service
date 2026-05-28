@@ -11,12 +11,37 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { authClient } from '#/lib/auth-client'
 import { useLogout } from '#/hooks/useLogout'
+import { TbDashboard, TbLogin2, TbSettings2 } from 'react-icons/tb'
+import { ButtonWithIcon } from './ButtonWithIcon'
+import { LinkWithIcon } from './LinkWithIcon'
 
 export function AuthHeaderButton({ className }: { className?: string }) {
   const { session } = RootRoute.useRouteContext()
   const logout = useLogout()
+
+  const userMenuItems: (({ name: string; destination: string; icon: React.ComponentType; } | {name: string; icon: React.ComponentType; action: () => any, variant?: string })[])[] = [
+    [
+      {
+        name: 'Dashboard',
+        destination: '/user/dashboard',
+        icon: TbDashboard
+      },
+      {
+        name: 'Settings',
+        destination: '/user/dashboard',
+        icon: TbSettings2
+      }
+    ],
+    [
+      {
+        name: 'Sign out',
+        action: () => logout(),
+        icon: TbLogin2,
+        variant: 'destructive'
+      }
+    ]
+  ]
 
   return <div className={className || ''}>
     {session?.user ? (
@@ -27,7 +52,7 @@ export function AuthHeaderButton({ className }: { className?: string }) {
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className='rounded-sm border bg-popover p-2 min-w-fit'>
+        <DropdownMenuContent className='rounded-sm border bg-popover min-w-fit mx-2'>
           <DropdownMenuGroup>
             <DropdownMenuLabel>
               <div className='flex gap-2 items-center'>
@@ -44,24 +69,38 @@ export function AuthHeaderButton({ className }: { className?: string }) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Link to="/user/dashboard">Dashboard</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link to="/user/dashboard">Dashboard</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Button variant='link' className='text-red-500 hover:text-red-600 p-0 m-0 h-auto' onClick={() => authClient.signOut({
-                fetchOptions: {
-                  onSuccess: () => { logout() }
-                }
-              })}>Sign out</Button>
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
+            </DropdownMenuGroup>
+              {userMenuItems.map((group, index) => (
+                <DropdownMenuGroup key={index}>
+                  {group.map((item) => (
+                    'destination' in item ? (
+                      <DropdownMenuItem>
+                        <LinkWithIcon icon={item.icon} to={item.destination} className='w-full'>
+                          {item.name}
+                        </LinkWithIcon>
+                      </DropdownMenuItem>
+                    ) : (
+                      <DropdownMenuItem
+                        key={item.name}
+                        onSelect={item.action}
+                        className={item.variant === 'destructive' ? 'text-destructive' : ''}
+                      >
+                        <div className='flex items-center gap-2'>
+                          <item.icon />
+                          {item.name}
+                        </div>
+                      </DropdownMenuItem>
+                    )
+                  ))}
+                  {index < userMenuItems.length - 1 && <DropdownMenuSeparator />}
+                </DropdownMenuGroup>
+              ))}
         </DropdownMenuContent>
       </DropdownMenu>
     ) : (
-      <Link to="/user/login">Login</Link>
+      <ButtonWithIcon icon={TbLogin2} variant='ghost' iconSize={5} iconColor='var(--color-primary)'>
+        <Link to="/user/login">Login</Link>
+      </ButtonWithIcon>
     )}
   </div>
 }

@@ -1,10 +1,4 @@
-import { pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core'
-
-export const events = pgTable('events', {
-  id: serial().primaryKey(),
-  name: text().notNull(),
-  description: text(),
-  start_time: timestamp().notNull(),
-  end_time: timestamp().notNull(),
-})
+export * from '../features/business/business.schema'
+export * from '../features/event/event.schema'
+export * from '../features/auth/auth.schema'
 

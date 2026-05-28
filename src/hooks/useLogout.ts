@@ -1,12 +1,17 @@
 // hooks/useLogout.ts
 import { useNavigate } from "@tanstack/react-router";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "#/features/auth/auth-client";
 
 export function useLogout() {
   const navigate = useNavigate();
 
   return async () => {
-    await authClient.signOut();
-    navigate({ to: '/user/login' });
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess() {
+          navigate({ to: '/user/login' });
+        }
+      }
+    });
   };
 }

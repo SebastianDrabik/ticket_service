@@ -1,10 +1,12 @@
 import { betterAuth } from 'better-auth'
-import { minLength, z } from 'zod'
+import { z } from 'zod'
 import { tanstackStartCookies } from 'better-auth/tanstack-start'
 import { drizzleAdapter } from "@better-auth/drizzle-adapter";
+import { getRequest } from '@tanstack/react-start/server'
 import { db } from '#/db';
-import * as schema from '#/db/auth-schema.ts';
+import * as schema from '#/features/auth/auth.schema';
 import { isValidPhoneNumber } from 'libphonenumber-js'
+import { authClient } from './auth-client'
 
 export const auth = betterAuth({
   rateLimit: {
@@ -45,3 +47,15 @@ export const auth = betterAuth({
     }
   }
 })
+
+export async function getSession() {
+  const request = getRequest()
+  const { data } = await authClient.getSession({
+    fetchOptions: {
+      cache: 'no-store',
+      headers: request?.headers,
+    },
+  })
+
+  return data
+}
