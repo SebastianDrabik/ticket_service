@@ -207,3 +207,9 @@
     @apply font-sans;
   }
 }
+
+label:has(+ input[required])::after,
+label:has(+ [required])::after {
+  content: ' *';
+  color: var(--destructive);
+}

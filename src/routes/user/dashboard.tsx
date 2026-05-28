@@ -1,8 +1,7 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card'
 import { Button } from '#/components/ui/button'
-import { authClient } from '#/lib/auth-client'
-import { useRouter } from '@tanstack/react-router'
+import { useLogout } from '#/hooks/useLogout'
 
 export const Route = createFileRoute('/user/dashboard')({
   component: DashboardComponent,
@@ -13,13 +12,8 @@ export const Route = createFileRoute('/user/dashboard')({
 
 function DashboardComponent() {
   const { session } = Route.useRouteContext()
-  const router = useRouter()
 
-  const logout = async () => {
-    await authClient.signOut()
-    await router.invalidate()
-    router.navigate({ to: '/user/login' })
-  }
+  const logout = useLogout()
 
   const user = session!.user
 
@@ -48,6 +42,24 @@ function DashboardComponent() {
             <span className={`text-sm font-medium ${user.emailVerified ? 'text-green-500' : 'text-yellow-500'}`}>
               {user.emailVerified ? 'Verified' : 'Not verified'}
             </span>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader><CardTitle className="text-sm font-medium text-muted-foreground">Date of birth</CardTitle></CardHeader>
+          <CardContent>
+            <p className="font-medium">{user.dateOfBirth ? user.dateOfBirth.toLocaleDateString() : 'Not provided'}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader><CardTitle className="text-sm font-medium text-muted-foreground">Full name</CardTitle></CardHeader>
+          <CardContent>
+            <p className="font-medium">{user.name} {user.surname}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader><CardTitle className="text-sm font-medium text-muted-foreground">Phone number</CardTitle></CardHeader>
+          <CardContent>
+            <p className="font-medium">{user.phoneNumber || 'Not provided'}</p>
           </CardContent>
         </Card>
       </div>

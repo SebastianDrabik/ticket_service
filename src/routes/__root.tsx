@@ -7,6 +7,7 @@ import Header from '../components/Header'
 
 import appCss from '../styles.css?url'
 import { authClient } from '#/lib/auth-client'
+import { createServerFn } from '@tanstack/react-start'
 
 const THEME_INIT_SCRIPT = `(function(){try{var stored=window.localStorage.getItem('theme');var mode=(stored==='light'||stored==='dark'||stored==='auto')?stored:'auto';var prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;var resolved=mode==='auto'?(prefersDark?'dark':'light'):mode;var root=document.documentElement;root.classList.remove('light','dark');root.classList.add(resolved);if(mode==='auto'){root.removeAttribute('data-theme')}else{root.setAttribute('data-theme',mode)}root.style.colorScheme=resolved;}catch(e){}})();`
 
@@ -16,11 +17,18 @@ type RouterContext = {
   session: Session | null
 }
 
+const getSession = createServerFn({ method: 'GET' }).handler(async () => {
+  const { getRequest } = await import('@tanstack/react-start/server')
+  const request = getRequest()
+  const { data } = await authClient.getSession({
+    fetchOptions: { cache: 'no-store', headers: request?.headers },
+  })
+  return data
+})
+
 export const Route = createRootRouteWithContext<RouterContext>()({
   beforeLoad: async ({ matches }) => {
-    const request = getRequest()
-
-    const { data } = await authClient.getSession({ fetchOptions: { cache: 'no-store', headers: request?.headers } })
+    const data = await getSession()
 
     const isAuthenticated = !!data?.user
     const requiresAuth = matches.some(m => m.staticData?.requireAuth)
