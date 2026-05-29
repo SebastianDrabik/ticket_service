@@ -12,7 +12,28 @@ npm install
 npm run dev
 ```
 
+## Local Development
+
+For local development, ensure you have a `.env.local` file in the project root with the following:
+
+```text
+POSTGRES_DB=ticket_service
+POSTGRES_USER=ticket_service
+POSTGRES_PASSWORD=ticket_service!2026#Db9Xy
+DATABASE_URL=postgresql://ticket_service:ticket_service!2026#Db9Xy@localhost:5432/ticket_service
+```
+
+Install dependencies and run the development server:
+
+```bash
+npm install
+npm run dev
+```
+
+The dev server will hot‑reload by default. No Docker steps are needed for a quick local workflow.
+
 ## Running Postgres with Docker
+
 
 Start a local Postgres container for development:
 
@@ -21,14 +42,6 @@ docker compose up -d postgres
 ```
 
 The database will listen on `localhost:5432` and use the credentials configured in [.env.local](/home/ubuntu/drive2/www/ticket_service/.env.local).
-
-To browse the database in a web UI, start pgAdmin:
-
-```bash
-docker compose up -d pgadmin
-```
-
-Open `http://localhost:5050` and sign in with `admin@ticketservice.local` and `TicketService!2026#PgAdmin9`. When adding the server connection inside pgAdmin, use host `postgres`, port `5432`, database `ticket_service`, user `ticket_service`, and the database password from [.env.local](/home/ubuntu/drive2/www/ticket_service/.env.local).
 
 To start the database and website together:
 
@@ -41,6 +54,28 @@ The website will be available at `http://localhost:3000`.
 If you already have the Postgres volume from an older password, run `docker compose down -v` once so the new password is applied on first initialization.
 
 # Building For Production
+
+## Running in Production with Docker
+
+You can run the application in a production environment using Docker Compose. This setup bundles the pre‑built Vite output and runs it with `NODE_ENV=production`.
+
+```bash
+# Build the Docker image (website service uses the Dockerfile)
+docker compose build website
+
+# Start the stack (Postgres + website)
+docker compose up -d
+
+# The app will be available on http://localhost:3000
+```
+
+If you prefer a single command for building and running:
+
+```bash
+docker compose up --build -d
+```
+
+The `website` service in `docker-compose.yml` automatically sets `NODE_ENV=production` and only copies the compiled output, keeping the runtime lightweight.
 
 To build this application for production:
 

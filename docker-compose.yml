@@ -29,32 +29,11 @@ services:
     env_file:
       - .env.local
     environment:
+      NODE_ENV: production
+      PORT: 3000
       DATABASE_URL: 'postgresql://ticket_service:ticket_service%212026%23Db9Xy@postgres:5432/ticket_service'
     ports:
       - '3000:3000'
-    volumes:
-      - .:/app
-      - website-node_modules:/app/node_modules
-    command: sh -lc "npm ci && npm run dev -- --host 0.0.0.0 --port 3000"
-
-  pgadmin:
-    image: dpage/pgadmin4:9.15
-    container_name: ticket_service-pgadmin
-    restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      PGADMIN_DEFAULT_EMAIL: 'pgadmin@example.net'
-      PGADMIN_DEFAULT_PASSWORD: 'tickeets3rvice-Db9Xy-202'
-      PGADMIN_DISABLE_POSTFIX: '1'
-      PGADMIN_CONFIG_CHECK_EMAIL_DELIVERABILITY: 'False'
-    ports:
-      - '5050:80'
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
 
 volumes:
   postgres-data:
-  website-node_modules:
-  pgadmin-data:

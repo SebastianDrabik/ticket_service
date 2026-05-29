@@ -1,6 +1,7 @@
 import { db } from '../../db'
 import { and, eq } from 'drizzle-orm'
 import { businesses, businessMembers } from './business.schema'
+import type { BusinessRole } from './business.permissions.server'
 
 type Business = typeof businesses.$inferSelect
 type DbResponse = { success: boolean, message?: string }
@@ -54,6 +55,11 @@ export async function getBusinessById(businessId: number) {
 
 export async function getBusinessByUserId(userId: string) {
   const res = await db.select().from(businesses).innerJoin(businessMembers, eq(businessMembers.business_id, businesses.id)).where(eq(businessMembers.user_id, userId))
+
+  if (res.length === 0) {
+    return null
+  }
+
   return res[0]
 }
 
@@ -62,7 +68,7 @@ export async function getMemberRole(businessId: number, userId: string) {
   return res[0]?.role
 }
 
-export async function addBusinessMember(businessId: number, userId: string, role: 'owner' | 'manager' | 'member') {
+export async function addBusinessMember(businessId: number, userId: string, role: BusinessRole) {
   const res = await db.insert(businessMembers).values({
     business_id: businessId,
     user_id: userId,

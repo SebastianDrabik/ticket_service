@@ -53,7 +53,7 @@ export async function getSession() {
   const { data } = await authClient.getSession({
     fetchOptions: {
       cache: 'no-store',
-      headers: request?.headers,
+      headers: request.headers,
     },
   })
 

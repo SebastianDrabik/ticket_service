@@ -1,12 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireAuthenticatedUser } from "#/features/auth/auth.middleware";
+import { requireAuthenticatedUserMiddleware } from "#/features/auth/auth.middleware";
 import { createBusiness as createBusinessServer } from "./business.server";
 
 // TODO: add validation for phone number and NIP (Polish tax identification number)
 
 export const createBusiness = createServerFn({ method: 'POST' })
-  .middleware([requireAuthenticatedUser])
+  .middleware([requireAuthenticatedUserMiddleware])
   .inputValidator(z.object({
     name: z.string().min(1, "Name is required"),
     address: z.string().min(1, "Address is required"),

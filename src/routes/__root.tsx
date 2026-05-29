@@ -9,6 +9,8 @@ import { createServerFn } from '@tanstack/react-start'
 import { TooltipProvider } from '#/components/ui/tooltip'
 import { getSession } from '#/features/auth/auth.server'
 
+import type { authClient } from '#/features/auth/auth-client'
+
 const THEME_INIT_SCRIPT = `(function(){try{var stored=window.localStorage.getItem('theme');var mode=(stored==='light'||stored==='dark'||stored==='auto')?stored:'auto';var prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;var resolved=mode==='auto'?(prefersDark?'dark':'light'):mode;var root=document.documentElement;root.classList.remove('light','dark');root.classList.add(resolved);if(mode==='auto'){root.removeAttribute('data-theme')}else{root.setAttribute('data-theme',mode)}root.style.colorScheme=resolved;}catch(e){}})();`
 
 type Session = typeof authClient.$Infer.Session
@@ -16,8 +18,6 @@ type Session = typeof authClient.$Infer.Session
 type RouterContext = {
   session: Session | null
 }
-
-import { authClient } from '#/features/auth/auth-client'
 
 const getSessionData = createServerFn({ method: 'GET' }).handler(async () => {
   return await getSession()
@@ -29,7 +29,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 
     const isAuthenticated = !!data?.user
     const requireAuth = [...matches]
-      .map(match => match.staticData?.requireAuth)
+      .map(match => match.staticData.requireAuth)
       .find((value): value is 'user' | 'guest' => value === 'user' || value === 'guest')
 
     if (requireAuth === 'user' && !isAuthenticated) throw redirect({ to: '/user/login' })
@@ -47,7 +47,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: 'TicketFlow',
       },
     ],
     links: [

@@ -2,7 +2,13 @@ import { boolean, pgEnum, pgTable, serial, text } from 'drizzle-orm/pg-core'
 
 import { user } from '../auth/auth.schema'
 
-export const BusinessRole = pgEnum('business_role', ['owner', 'manager', 'member'])
+export const BUSINESS_ROLES = [
+  'owner',
+  'manager',
+  'member',
+] as const
+
+export const BusinessRole = pgEnum('business_role', BUSINESS_ROLES )
 
 export const businesses = pgTable('businesses', {
   id: serial().primaryKey(),

@@ -72,16 +72,16 @@ export function AuthHeaderButton({ className }: { className?: string }) {
             </DropdownMenuGroup>
               {userMenuItems.map((group, index) => (
                 <DropdownMenuGroup key={index}>
-                  {group.map((item) => (
+                  {group.map((item, idx) => (
                     'destination' in item ? (
-                      <DropdownMenuItem>
+                      <DropdownMenuItem key={idx}>
                         <LinkWithIcon icon={item.icon} to={item.destination} className='w-full'>
                           {item.name}
                         </LinkWithIcon>
                       </DropdownMenuItem>
                     ) : (
-                      <DropdownMenuItem
-                        key={item.name}
+                      <DropdownMenuItem 
+                        key={idx}
                         onSelect={item.action}
                         className={item.variant === 'destructive' ? 'text-destructive' : ''}
                       >
